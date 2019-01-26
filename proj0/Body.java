@@ -28,6 +28,11 @@ public class Body {
        mass = b.mass;
        imgFileName = b.imgFileName;
     }
+
+    public void draw(){
+        StdDraw.picture(xxPos,yyPos,"images/"+ imgFileName);
+        StdDraw.show();
+    }
     public double calcDistance(Body b){
       /*Finds distance between body b and the body currently performing calculation*/
       double dx = this.xxPos-b.xxPos;
