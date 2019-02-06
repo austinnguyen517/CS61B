@@ -120,8 +120,8 @@ public class ArrayDeque<T> {
         }
         T temp;
         last = ((last - 1) + length) % length;
-        items[last] = null;
         temp = items[last];
+        items[last] = null;
         size -= 1;
         if (((double) size / length) < .25 && length >= 16) {
             sizeDown();
