@@ -1,32 +1,32 @@
 public class LinkedListDeque<T> {
     /* Class definition of LinkedListDeque*/
 
-    private Node sent_first;
+    private Node sentFirst;
     private int size;
 
-    public LinkedListDeque(){
+    public LinkedListDeque() {
         /*Constructor for LinkedListDeque Class*/
         /*Makes two sentinels referencing each other*/
-        sent_first = new Node(null, null, null);
-        Node sent_last = new Node(null, sent_first, sent_first);
-        sent_first.next = sent_last;
-        sent_first.prev = sent_last;
+        sentFirst = new Node(null, null, null);
+        Node sentLast = new Node(null, sentFirst, sentFirst);
+        sentFirst.next = sentLast;
+        sentFirst.prev = sentLast;
     }
     public class Node {
-        public T item;
-        public Node prev;
-        public Node next;
+        private T item;
+        private Node prev;
+        private Node next;
 
-        public Node(T val, Node before, Node after){
+        public Node(T val, Node before, Node after) {
             item = val;
             prev = before;
             next = after;
         }
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         /*Returns true if there are no nodes between the two sentinels*/
-        return sent_first.next == sent_first.prev;
+        return sentFirst.next == sentFirst.prev;
     }
 
     public int size() {
@@ -34,105 +34,108 @@ public class LinkedListDeque<T> {
         return this.size;
     }
 
-    public void addFirst(T item){
+    public void addFirst(T item) {
         /*Adds a Node containing item of type T at beginning of LL*/
-        Node add_this = new Node(item, sent_first, sent_first.next);
-        sent_first.next = add_this;
-        add_this.next.prev = add_this;
+        Node addThis = new Node(item, sentFirst, sentFirst.next);
+        sentFirst.next = addThis;
+        addThis.next.prev = addThis;
         size += 1;
     }
 
-    public void addLast (T item){
+    public void addLast(T item) {
         /*Adds a Node containing item of type T at end of LL*/
-        Node add_this = new Node(item, sent_first.prev.prev, sent_first.prev);
-        sent_first.prev.prev.next = add_this;
-        add_this.next.prev = add_this;
+        Node addThis = new Node(item, sentFirst.prev.prev, sentFirst.prev);
+        sentFirst.prev.prev.next = addThis;
+        addThis.next.prev = addThis;
         size += 1;
     }
 
-    public LinkedListDeque(LinkedListDeque other){
+    public LinkedListDeque(LinkedListDeque other) {
         /*Creates a deep copy of other...making a new LinkedListDeque*/
         /*Get the head of "other"...REFERNCE TO THE OBJECT...head and curr*/
         /*Use methods we have defined to recreate the other*/
         /*THe stopping condition shoudl be while head != curr */
 
         /*EMPTY LIST CONSTRUCTOR*/
-        sent_first = new Node(null, null, null);
-        Node sent_last = new Node(null, sent_first, sent_first);
-        sent_first.next = sent_last;
-        sent_first.prev = sent_last;
+        sentFirst = new Node(null, null, null);
+        Node sentLast = new Node(null, sentFirst, sentFirst);
+        sentFirst.next = sentLast;
+        sentFirst.prev = sentLast;
 
-        Node curr = other.Sentinel();
+        Node curr = other.sentinel();
         Node last = curr.prev;
         curr = curr.next;
 
-        while (curr != last){
+        while (curr != last) {
             addLast(curr.item);
             curr = curr.next;
         }
     }
 
-    public T getRecursive(int index){
+    public T getRecursive(int index) {
         /*Gets the ith object T using recursion*/
-        return this.Recurse(sent_first.next, sent_first.prev, index);
+        return this.recurse(sentFirst.next, sentFirst.prev, index);
     }
 
-    private T Recurse (Node curr, Node last_sent, int i){
+    private T recurse(Node curr, Node lastsent, int i) {
         /*Recurses with these condition finding the ith object T*/
-        /*Curr: current node traversing, Last_sent: last_sent...stopping condition, i: index number*/
-        if (curr == last_sent){
+        /*Curr: current node traversing
+        Last_sent: last_sent...stopping condition
+        i: index number*/
+        if (curr == lastsent) {
             return null;
-        } if (i == 0){
+        }
+        if (i == 0) {
             return curr.item;
         } else {
-            return Recurse(curr.next, last_sent, i - 1);
+            return recurse(curr.next, lastsent, i - 1);
         }
     }
 
-    private Node Sentinel (){
-        return sent_first;
+    private Node sentinel() {
+        return sentFirst;
     }
 
-    public void printDeque(){
-        Node curr = sent_first.next;
-        Node sent_last = sent_first.prev;
+    public void printDeque() {
+        Node curr = sentFirst.next;
+        Node sentLast = sentFirst.prev;
         String res = "";
-        while (curr != sent_last){
+        while (curr != sentLast) {
             res += String.valueOf(curr.item) + " ";
             curr = curr.next;
         }
         System.out.print(res);
     }
 
-    public T removeFirst(){
+    public T removeFirst() {
         /*Removes all references to first node, delete from LL*/
-        if (this.isEmpty()){
+        if (this.isEmpty()) {
             return null;
         }
-        Node temp = sent_first.next;
-        sent_first.next = temp.next;
-        sent_first.next.prev = sent_first;
+        Node temp = sentFirst.next;
+        sentFirst.next = temp.next;
+        sentFirst.next.prev = sentFirst;
         size -= 1;
         return temp.item;
     }
 
-    public T removeLast(){
+    public T removeLast() {
         /*Removes all references to the last node, delete from LL*/
-        if (this.isEmpty()){
+        if (this.isEmpty()) {
             return null;
         }
-        Node temp = sent_first.prev.prev;
-        temp.prev.next = sent_first.prev;
-        sent_first.prev.prev = temp.prev;
+        Node temp = sentFirst.prev.prev;
+        temp.prev.next = sentFirst.prev;
+        sentFirst.prev.prev = temp.prev;
         size -= 1;
         return temp.item;
     }
 
-    public T get(int index){
-        Node curr = sent_first.next;
-        Node last_sent = sent_first.prev;
+    public T get(int index) {
+        Node curr = sentFirst.next;
+        Node lastSent = sentFirst.prev;
         while (index != 0) {
-            if (last_sent == curr){
+            if (lastSent == curr) {
                 return null;
             }
             curr = curr.next;

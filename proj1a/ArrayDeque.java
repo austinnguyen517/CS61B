@@ -1,4 +1,4 @@
-/**Array Deque Class**/
+
 public class ArrayDeque<T> {
 
     /*Size: # of elements in the array, first: index+1 % entire array representing head of array*/
@@ -150,8 +150,8 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        if ((last > first && !(newInd >= first && newInd < last)) ||
-                (first > last && (newInd < first && newInd >= last))) {
+        if ((last > first && !(newInd >= first && newInd < last))
+                || (first > last && (newInd < first && newInd >= last))) {
             /*If last is larger than first and the new
             index is not between it, it is not in the deque*/
             /* or if first is larger than last and the new
