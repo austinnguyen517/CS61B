@@ -2,6 +2,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.util.Formatter;
+
+/**
+ * A naked recursive list of integers, similar to what we saw in lecture 3, but
+ * with a large number of additional methods.
+ *
+ * @author P. N. Hilfinger, with some modifications by Josh Hug and melaniecebula
+ *         [Do not modify this file.]
+ */
+
+
+
+
 public class IntListTest {
 
     /**
@@ -64,6 +77,24 @@ public class IntListTest {
         IntList exp = IntList.of(1, 2, 3, 4, 5, 6);
         assertEquals(exp, IntList.catenate(A, B));
         assertEquals(IntList.of(1, 2, 3), A);
+    }
+
+    @Test
+    public void testReverse(){
+        IntList myList = IntList.of(0,1,2,3);
+        myList = IntList.reverse(myList);
+        IntList theirList = IntList.of(3,2,1,0);
+
+        while (myList != null && theirList != null) {
+            assertEquals(theirList.first, myList.first);
+            myList = myList.rest;
+            theirList = theirList.rest;
+        }
+        assertEquals(theirList, myList);
+
+        IntList anotherList = IntList.of(0,1,2,3);
+        assertNotEquals(anotherList, IntList.reverse(anotherList));
+        assertEquals(null, IntList.reverse(null));
     }
 
     /** If you're running this from the command line, you'll need
