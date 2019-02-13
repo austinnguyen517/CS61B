@@ -13,7 +13,7 @@ public class Palindrome {
         Deque<Character> segmentWord = wordToDeque(word);
         int last = segmentWord.size() - 1;
         int first = 0;
-        while ((last != first) && (last > first)) {
+        while (last > first) {
             if (segmentWord.get(first) != segmentWord.get(last)) {
                 return false;
             }
