@@ -1,7 +1,7 @@
-public class OffByN implements CharacterComparator{
+public class OffByN implements CharacterComparator {
     private int boundary;
 
-    public OffByN (int N) {
+    public OffByN(int N) {
         boundary = N;
     }
     public boolean equalChars(char x, char y) {
