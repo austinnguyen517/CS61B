@@ -1,23 +1,19 @@
 package es.datastructur.synthesizer;
 import java.util.Iterator;
 
-//TODO: Make sure to that this class and all of its methods are public
-//TODO: Make sure to add the override tag for all overridden methods
-//TODO: Make sure to make this class implement BoundedQueue<T>
-
-public class ArrayRingBuffer<T> implements BoundedQueue <T> {
+public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     private int first;
     private int last;
     private int fillCount;
     private T[] rb;
 
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
         if (!(other instanceof ArrayRingBuffer)) {
             return false;
         }
         Iterator<T> myIt = this.iterator();
-        Iterator<T> thatIt = ((ArrayRingBuffer)other).iterator();
+        Iterator<T> thatIt = ((ArrayRingBuffer) other).iterator();
         while (myIt.hasNext() && thatIt.hasNext()) {
             if (myIt.next() != thatIt.next()) {
                 return false;
@@ -77,7 +73,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue <T> {
         return rb[first];
     }
 
-    public Iterator <T> iterator() {
+    public Iterator<T> iterator() {
         return new Thing();
     }
 
@@ -86,7 +82,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue <T> {
         private int total;
         private int i;
 
-        public Thing() {
+        Thing() {
             count = first;
             total = fillCount;
             i = 0;
@@ -94,7 +90,7 @@ public class ArrayRingBuffer<T> implements BoundedQueue <T> {
         public boolean hasNext() {
             return i != total;
         }
-        public T next(){
+        public T next() {
             T returnItem = rb[count];
             count = (count + 1) % rb.length;
             i += 1;

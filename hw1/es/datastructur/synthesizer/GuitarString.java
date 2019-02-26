@@ -1,5 +1,4 @@
 package es.datastructur.synthesizer;
-import edu.princeton.cs.introcs.StdAudio;
 
 //Note: This file will not compile until you complete task 1 (BoundedQueue).
 public class GuitarString {
@@ -13,7 +12,7 @@ public class GuitarString {
 
     /* Create a guitar string of the given frequency.  */
     public GuitarString(double frequency) {
-        buffer = new ArrayRingBuffer((int) Math.round(SR/frequency));
+        buffer = new ArrayRingBuffer((int) Math.round(SR / frequency));
         while (!buffer.isFull()) {
             buffer.enqueue(0.0);
         }
@@ -37,12 +36,9 @@ public class GuitarString {
      * the Karplus-Strong algorithm.
      */
     public void tic() {
-        // TODO: Dequeue the front sample and enqueue a new sample that is
-        //       the average of the two multiplied by the DECAY factor.
-        //       Do not call StdAudio.play().
         double value = buffer.dequeue();
         double other = buffer.peek();
-        value = ((value + other)* .5) * DECAY;
+        value = ((value + other) * .5) * DECAY;
         buffer.enqueue(value);
     }
 
