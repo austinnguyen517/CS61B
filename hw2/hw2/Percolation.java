@@ -21,12 +21,12 @@ public class Percolation {
             }
         }
 
-        trackTwoSent = new WeightedQuickUnionUF(dim*dim + 2);
-        trackOneSent = new WeightedQuickUnionUF(dim*dim + 1);
+        trackTwoSent = new WeightedQuickUnionUF(dim * dim + 2);
+        trackOneSent = new WeightedQuickUnionUF(dim * dim + 1);
         for (int i = 0; i < dim; i += 1) {
             trackTwoSent.union(0, i + 1);
             trackOneSent.union(0, i + 1);
-            trackTwoSent.union(dim*dim + 1, dim*dim - i);
+            trackTwoSent.union(dim * dim + 1, dim * dim - i);
         }
         /*Each element is represented by taking 4 * row + column + 1 in trackers*/
         open = 0;
@@ -44,7 +44,7 @@ public class Percolation {
         }
     }
 
-    private boolean checkThenConnect (int rowOrig, int colOrig, int rowOther, int colOther) {
+    private boolean checkThenConnect(int rowOrig, int colOrig, int rowOther, int colOther) {
         if (rowOther < 0 || rowOther >= dim || colOther < 0 || colOther >= dim) {
             return true;
         }
@@ -74,8 +74,8 @@ public class Percolation {
         return open;
     }
 
-    public boolean percolates(){
-        return trackTwoSent.connected(0, dim*dim + 1);
+    public boolean percolates() {
+        return trackTwoSent.connected(0, dim * dim + 1);
     }
 
     public static void main(String[] args) {

@@ -19,7 +19,7 @@ public class PercolationStats {
         for (int i = 0; i < T; i += 1) {
             Percolation test = pf.make(N);
             while (!test.percolates()) {
-                test.open(StdRandom.uniform(N+1), StdRandom.uniform(N+1));
+                test.open(StdRandom.uniform(N + 1), StdRandom.uniform(N + 1));
             }
             double count = test.numberOfOpenSites();
             fractions[i] = count / (N * N);
