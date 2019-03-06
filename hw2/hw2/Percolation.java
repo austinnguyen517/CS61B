@@ -75,7 +75,7 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        return trackTwoSent.connected(0, dim * dim + 1);
+        return trackTwoSent.connected(0, dim * dim + 1) && numberOfOpenSites() >= dim;
     }
 
     public static void main(String[] args) {
