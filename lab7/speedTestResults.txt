@@ -1,0 +1,16 @@
+For all length 50 strings:
+
+Adding 1000 strings:
+ULL: .01 sec
+BST: .00 sec
+TreeMap: .00 sec
+
+Adding in 10000 strings:
+ULL: .36 sec
+BST: .01 sec
+TreeMap: .01 sec
+
+Adding in 1000000 strings:
+ULL: Stack overflow
+BST: 2.26 sec
+TreeMap: 1.81 sec
