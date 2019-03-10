@@ -3,7 +3,6 @@ package hw3.hash;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,10 +21,6 @@ public class TestSimpleOomage {
 
     @Test
     public void testHashCodePerfect() {
-        /* TODO: Write a test that ensures the hashCode is perfect,
-          meaning no two SimpleOomages should EVER have the same
-          hashCode UNLESS they have the same red, blue, and green values!
-         */
         HashSet track = new HashSet();
         for (int r = 0; r <= 255; r += 5) {
             for (int g = 0; g <= 255; g += 5) {
