@@ -2,7 +2,6 @@ package bearmaps.hw4;
 import bearmaps.proj2ab.DoubleMapPQ;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
@@ -70,12 +69,12 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             return new ArrayList<>();
         }
         Vertex curr = destination;
-        LinkedList<Vertex> ret = new LinkedList<>();
+        ArrayList<Vertex> ret = new ArrayList<>();
         while (curr != begin) {
-            ret.addFirst(curr);
+            ret.add(0, curr);
             curr = vertexToPath.get(curr);
         }
-        ret.addFirst(curr);
+        ret.add(0, curr);
 
         return ret;
     }
