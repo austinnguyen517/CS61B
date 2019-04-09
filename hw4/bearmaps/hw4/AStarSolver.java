@@ -1,5 +1,5 @@
 package bearmaps.hw4;
-import bearmaps.proj2ab.DoubleMapPQ;
+import bearmaps.proj2ab.ArrayHeapMinPQ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +15,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private Vertex begin;
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
-        DoubleMapPQ<Vertex> pq = new DoubleMapPQ<>();
+        ArrayHeapMinPQ<Vertex> pq = new ArrayHeapMinPQ<>();
         pq.add(start, 0);
         vertexToDistance.put(start, 0.0);
         destination = end;
