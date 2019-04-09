@@ -40,15 +40,16 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             for (WeightedEdge<Vertex> edge: allEdgesOut) {
                 Vertex dest = edge.to();
                 double w = edge.weight();
+                double distP = vertexToDistance.get(p);
                 if (!vertexToDistance.containsKey(dest)
-                        || (vertexToDistance.get(p) + w < vertexToDistance.get(dest))) {
-                    vertexToDistance.put(dest, vertexToDistance.get(p) + w);
+                        || (distP + w < vertexToDistance.get(dest))) {
+                    vertexToDistance.put(dest, distP + w);
                     vertexToPath.put(dest, p);
                     if (pq.contains(dest)) {
-                        pq.changePriority(dest, vertexToDistance.get(p) + w
+                        pq.changePriority(dest, distP + w
                                 + input.estimatedDistanceToGoal(dest, end));
                     } else {
-                        pq.add(dest, vertexToDistance.get(p) + w
+                        pq.add(dest, distP + w
                                 + input.estimatedDistanceToGoal(dest, end));
                     }
 
@@ -65,7 +66,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         return result;
     }
     public List<Vertex> solution() {
-        if (result.equals(SolverOutcome.TIMEOUT) || result.equals(SolverOutcome.UNSOLVABLE)) {
+        if (!result.equals(SolverOutcome.SOLVED)) {
             return new ArrayList<>();
         }
         Vertex curr = destination;
@@ -79,7 +80,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         return ret;
     }
     public double solutionWeight() {
-        if (result.equals(SolverOutcome.TIMEOUT) || result.equals(SolverOutcome.UNSOLVABLE)) {
+        if (!result.equals(SolverOutcome.SOLVED)) {
             return 0;
         }
         return vertexToDistance.get(destination);
