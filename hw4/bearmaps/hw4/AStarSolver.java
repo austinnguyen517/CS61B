@@ -15,8 +15,8 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private SolverOutcome result;
     private Vertex destination;
     private Vertex begin;
-    public ArrayList<Vertex> sol = new ArrayList<>();
-    public double solWeight = 0;
+    private ArrayList<Vertex> sol = new ArrayList<>();
+    private double solWeight = 0;
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
         DoubleMapPQ<Vertex> pq = new DoubleMapPQ<>();
