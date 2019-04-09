@@ -3,6 +3,7 @@ import bearmaps.proj2ab.DoubleMapPQ;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import edu.princeton.cs.algs4.Stopwatch;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private HashMap<Vertex, Double> vertexToDistance = new HashMap<>();
@@ -20,11 +21,10 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         destination = end;
         begin = start;
 
-        long beginTime = System.nanoTime();
+        Stopwatch timer = new Stopwatch();
         count = 0;
         while (pq.size() != 0) {
-            long currTime = System.nanoTime();
-            if (((double) (currTime - beginTime) / 1000000000) >= timeout) {
+            if (timer.elapsedTime() >= timeout) {
                 result = SolverOutcome.TIMEOUT;
                 totTime = timeout;
                 break;
@@ -33,7 +33,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             count += 1;
             if (p.equals(end)) {
                 result = SolverOutcome.SOLVED;
-                totTime = (double) System.nanoTime() - beginTime;
+                totTime = timer.elapsedTime();
                 break;
             }
             List<WeightedEdge<Vertex>> allEdgesOut = input.neighbors(p);
@@ -57,7 +57,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         }
         if (pq.size() == 0 && result != SolverOutcome.SOLVED && result != SolverOutcome.TIMEOUT) {
             result = SolverOutcome.UNSOLVABLE;
-            totTime = (double) System.nanoTime() - beginTime;
+            totTime = timer.elapsedTime();
         }
 
     }
