@@ -15,6 +15,8 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private SolverOutcome result;
     private Vertex destination;
     private Vertex begin;
+    public ArrayList<Vertex> sol = new ArrayList<>();
+    public double solWeight = 0;
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
         DoubleMapPQ<Vertex> pq = new DoubleMapPQ<>();
@@ -25,20 +27,27 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         begin = start;
 
         Stopwatch timer = new Stopwatch();
-        count = 0;
+        count = -1;
         while (pq.size() != 0) {
-            if (timer.elapsedTime() >= timeout) {
-                result = SolverOutcome.TIMEOUT;
-                totTime = timeout;
-                break;
-            }
             Vertex p = pq.removeSmallest();
             marked.add(p);
             count += 1;
             if (p.equals(end)) {
                 result = SolverOutcome.SOLVED;
                 totTime = timer.elapsedTime();
-                break;
+                solWeight = vertexToDistance.get(p);
+                Vertex curr = destination;
+                while (!curr.equals(begin)) {
+                    sol.add(0, curr);
+                    curr = vertexToPath.get(curr);
+                }
+                sol.add(0, curr);
+                return;
+            }
+            if (timer.elapsedTime() >= timeout) {
+                result = SolverOutcome.TIMEOUT;
+                totTime = timeout;
+                return;
             }
             List<WeightedEdge<Vertex>> allEdgesOut = input.neighbors(p);
             for (WeightedEdge<Vertex> edge: allEdgesOut) {
@@ -62,34 +71,18 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             }
 
         }
-        if (pq.size() == 0 && result != SolverOutcome.SOLVED && result != SolverOutcome.TIMEOUT) {
-            result = SolverOutcome.UNSOLVABLE;
-            totTime = timer.elapsedTime();
-        }
+        result = SolverOutcome.UNSOLVABLE;
+        totTime = timer.elapsedTime();
 
     }
     public SolverOutcome outcome() {
         return result;
     }
     public List<Vertex> solution() {
-        if (!result.equals(SolverOutcome.SOLVED)) {
-            return new ArrayList<>();
-        }
-        Vertex curr = destination;
-        ArrayList<Vertex> ret = new ArrayList<>();
-        while (curr != begin) {
-            ret.add(0, curr);
-            curr = vertexToPath.get(curr);
-        }
-        ret.add(0, curr);
-
-        return ret;
+        return sol;
     }
     public double solutionWeight() {
-        if (!result.equals(SolverOutcome.SOLVED)) {
-            return 0;
-        }
-        return vertexToDistance.get(destination);
+        return solWeight;
     }
     public int numStatesExplored() {
         return count;
