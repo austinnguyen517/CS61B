@@ -1,8 +1,10 @@
 package bearmaps.hw4;
-import bearmaps.proj2ab.ArrayHeapMinPQ;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+
+import bearmaps.proj2ab.DoubleMapPQ;
 import edu.princeton.cs.algs4.Stopwatch;
 
 public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
@@ -15,7 +17,8 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private Vertex begin;
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
-        ArrayHeapMinPQ<Vertex> pq = new ArrayHeapMinPQ<>();
+        DoubleMapPQ<Vertex> pq = new DoubleMapPQ<>();
+        HashSet<Vertex> marked = new HashSet<>();
         pq.add(start, 0);
         vertexToDistance.put(start, 0.0);
         destination = end;
@@ -30,6 +33,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
                 break;
             }
             Vertex p = pq.removeSmallest();
+            marked.add(p);
             count += 1;
             if (p.equals(end)) {
                 result = SolverOutcome.SOLVED;
@@ -39,22 +43,24 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             List<WeightedEdge<Vertex>> allEdgesOut = input.neighbors(p);
             for (WeightedEdge<Vertex> edge: allEdgesOut) {
                 Vertex dest = edge.to();
-                double w = edge.weight();
-                double distP = vertexToDistance.get(p);
-                if (!vertexToDistance.containsKey(dest)
-                        || (distP + w < vertexToDistance.get(dest))) {
-                    vertexToDistance.put(dest, distP + w);
-                    vertexToPath.put(dest, p);
-                    if (pq.contains(dest)) {
-                        pq.changePriority(dest, distP + w
-                                + input.estimatedDistanceToGoal(dest, end));
-                    } else {
-                        pq.add(dest, distP + w
-                                + input.estimatedDistanceToGoal(dest, end));
+                if (!marked.contains(dest)) {
+                    double w = edge.weight();
+                    double distP = vertexToDistance.get(p);
+                    if (!vertexToDistance.containsKey(dest)
+                            || (distP + w < vertexToDistance.get(dest))) {
+                        vertexToDistance.put(dest, distP + w);
+                        vertexToPath.put(dest, p);
+                        if (pq.contains(dest)) {
+                            pq.changePriority(dest, distP + w
+                                    + input.estimatedDistanceToGoal(dest, end));
+                        } else {
+                            pq.add(dest, distP + w
+                                    + input.estimatedDistanceToGoal(dest, end));
+                        }
                     }
-
                 }
             }
+
         }
         if (pq.size() == 0 && result != SolverOutcome.SOLVED && result != SolverOutcome.TIMEOUT) {
             result = SolverOutcome.UNSOLVABLE;
