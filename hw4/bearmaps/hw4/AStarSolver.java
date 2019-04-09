@@ -56,7 +56,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
                 }
             }
         }
-        if (pq.size() == 0) {
+        if (pq.size() == 0 && result != SolverOutcome.SOLVED && result != SolverOutcome.TIMEOUT) {
             result = SolverOutcome.UNSOLVABLE;
             totTime = (double) System.nanoTime() - beginTime;
         }
