@@ -68,7 +68,7 @@ public class MergeSort {
             Queue<Item> q1, Queue<Item> q2) {
         Queue<Item> res = new Queue<>();
         while (!q1.isEmpty() || !q2.isEmpty()) {
-            if (q1.isEmpty() || q1.peek().compareTo(q2.peek()) > 0) {
+            if (!q2.isEmpty() && (q1.isEmpty() || q1.peek().compareTo(q2.peek()) > 0)) {
                 Queue<Item> temp = q2;
                 q2 = q1;
                 q1 =  temp;
