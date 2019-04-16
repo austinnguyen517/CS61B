@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
+import static java.lang.Math.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -66,10 +66,10 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      *         <li>The tiles must be arranged in-order to reconstruct the full image.</li>
      *     </ul>
      *
-     * @param requestParams Map of the HTTP GET request's query parameters - the query box and
+     * requestParams Map of the HTTP GET request's query parameters - the query box and
      *               the user viewport width and height.
      *
-     * @param response : Not used by this function. You may ignore.
+     * response : Not used by this function. You may ignore.
      * @return A map of results for the front end as specified: <br>
      * "render_grid"   : String[][], the files to display. <br>
      * "raster_ul_lon" : Number, the bounding upper left longitude of the rastered image. <br>
@@ -82,14 +82,70 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      * "query_success" : Boolean, whether the query was able to successfully complete; don't
      *                    forget to set this to true on success! <br>
      */
+
     @Override
-    public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
-        Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
-        return results;
+    public Map<String, Object> processRequest(Map<String, Double> requestParams,
+                                              Response response) {
+
+        if (requestParams.get("lrlon") < requestParams.get("ullon")
+                || requestParams.get("lrlat") > requestParams.get("ullat")) {
+            return queryFail();
+        }
+
+        if (requestParams.get("lrlon") < ROOT_ULLON || requestParams.get("lrlat") > ROOT_ULLAT
+            || requestParams.get("ullon") > ROOT_LRLON || requestParams.get("ullat") < ROOT_LRLAT) {
+            return queryFail();
+        }
+        double width = requestParams.get("w");
+        double requestLonDPP = (requestParams.get("lrlon") - requestParams.get("ullon")) / width;
+        int depth = 7;
+        double worldWidth = ROOT_LRLON - ROOT_ULLON;
+        double worldHeight = ROOT_ULLAT - ROOT_LRLAT;
+        double kMax;
+
+        double currLonDPP;
+        for (int i = 7; i >= 0; i -= 1) {
+            kMax = Math.pow(2, i) - 1;
+            currLonDPP = (worldWidth / (kMax + 1)) / TILE_SIZE;
+            if (currLonDPP <= requestLonDPP) {
+                depth = i;
+            } else {
+                break;
+            }
+        }
+        kMax = Math.pow(2, depth) - 1;
+        double queryULO = requestParams.get("ullon");
+        double queryULA = requestParams.get("ullat");
+        double queryLRO = requestParams.get("lrlon");
+        double queryLRA = requestParams.get("lrlat");
+        double totalColumns = kMax + 1;
+
+        int columnStart = (int) (max(0, (queryULO - ROOT_ULLON) / (worldWidth / totalColumns)));
+        int columnEnd = (int) (min(kMax, (queryLRO - ROOT_ULLON) / (worldWidth / totalColumns)));
+        int rowStart = (int) (max(0, (ROOT_ULLAT - queryULA) / (worldHeight / totalColumns)));
+        int rowEnd = (int) (min(kMax, (ROOT_ULLAT - queryLRA) / (worldHeight / totalColumns)));
+
+        String[][] grid = new String[rowEnd - rowStart + 1][columnEnd - columnStart + 1];
+        for (int row = rowStart; row <= rowEnd; row += 1) {
+            String[] resultRow = new String[columnEnd - columnStart + 1];
+            for (int column = columnStart; column <= columnEnd; column += 1) {
+                resultRow[column - columnStart] = "d" + (depth)
+                        + "_x" + column + "_y" + row + ".png";
+            }
+            grid[row - rowStart] = resultRow;
+        }
+
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("query_success", true);
+        result.put("render_grid", grid);
+        result.put("raster_ul_lon", columnStart * (worldWidth / totalColumns) + ROOT_ULLON);
+        result.put("raster_ul_lat", ROOT_ULLAT - rowStart * (worldHeight / totalColumns));
+        result.put("raster_lr_lon", (columnEnd + 1) * (worldWidth / totalColumns) + ROOT_ULLON);
+        result.put("raster_lr_lat", ROOT_ULLAT - (rowEnd + 1) * (worldHeight / totalColumns));
+        result.put("depth", depth);
+
+        return result;
     }
 
     @Override

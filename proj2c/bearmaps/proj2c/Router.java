@@ -1,5 +1,7 @@
 package bearmaps.proj2c;
 
+import bearmaps.hw4.WeirdSolver;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -24,10 +26,9 @@ public class Router {
      */
     public static List<Long> shortestPath(AugmentedStreetMapGraph g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        //long src = g.closest(stlon, stlat);
-        //long dest = g.closest(destlon, destlat);
-        //return new WeirdSolver<>(g, src, dest, 20).solution();
-        return null;
+        long src = g.closest(stlon, stlat);
+        long dest = g.closest(destlon, destlat);
+        return new WeirdSolver<>(g, src, dest, 20).solution();
     }
 
     /**
@@ -38,7 +39,8 @@ public class Router {
      * @return A list of NavigatiionDirection objects corresponding to the input
      * route.
      */
-    public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g, List<Long> route) {
+    public static List<NavigationDirection> routeDirections(AugmentedStreetMapGraph g,
+                                                            List<Long> route) {
         /* fill in for part IV */
         return null;
     }
