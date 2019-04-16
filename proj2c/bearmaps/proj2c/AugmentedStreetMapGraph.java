@@ -27,9 +27,12 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
         List<Node> nodes = this.getNodes();
         List<Point> pointList = new ArrayList<>();
         for (Node node: nodes) {
-            Point curr = new Point(node.lon(), node.lat());
-            pointList.add(curr);
-            pointToNode.put(curr, node);
+            if (!neighbors(node.id()).isEmpty()) {
+                Point curr = new Point(node.lon(), node.lat());
+                pointList.add(curr);
+                pointToNode.put(curr, node);
+            }
+
         }
         weirdSet = new WeirdPointSet(pointList);
     }
